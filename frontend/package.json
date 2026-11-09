@@ -1,0 +1,41 @@
+{
+  "name": "peru-hydrowatch-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "node scripts/copy-cesium.mjs",
+    "data": "node scripts/build-data.mjs",
+    "dev": "next dev --webpack -p 3000",
+    "build": "next build --webpack",
+    "start": "next start -p 3000",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types \"tests/*.test.ts\"",
+    "sources:export": "node --experimental-strip-types scripts/export-sources.mjs",
+    "smoke": "node scripts/smoke-api.mjs",
+    "warm": "node scripts/warm-tiles.mjs",
+    "shot": "node scripts/screenshot.mjs"
+  },
+  "dependencies": {
+    "cesium": "1.146.0",
+    "echarts": "6.1.0",
+    "lucide-react": "0.468.0",
+    "next": "16.4.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "shpjs": "6.1.0",
+    "undici": "7.16.0",
+    "zustand": "5.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.13",
+    "@types/node": "22.10.2",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "adm-zip": "0.5.16",
+    "mapshaper": "0.7.98",
+    "pngjs": "7.0.0",
+    "puppeteer-core": "25.16.0",
+    "tailwindcss": "4.1.13",
+    "typescript": "5.7.2"
+  }
+}

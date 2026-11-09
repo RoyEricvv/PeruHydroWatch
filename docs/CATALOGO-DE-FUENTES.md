@@ -1,0 +1,36 @@
+# Catálogo de fuentes
+
+Generado desde `frontend/src/lib/sources.ts` con `npm run sources:export`. No editar a mano.
+
+Solo figura como **integrada** una fuente comprobada contra el servicio real. La app muestra además si responde ahora.
+
+| Institución | Servicio | Estado | Cobertura y resolución | Frecuencia y formato | Licencia | Calidad | Verificado |
+|---|---|---|---|---|---|---|---|
+| [SENAMHI](https://www.senamhi.gob.pe/?p=aviso-meteorologico) | Avisos meteorológicos y de activación de quebradas | integrada | Perú. Lista de avisos; polígonos por quebrada | Diaria o por evento. HTML (sin API documentada), SHP diario | Condiciones de uso por confirmar con SENAMHI; se cita y enlaza la fuente | Oficial. El servidor tuvo timeouts intermitentes durante las pruebas. | 2026-11-08: tabla parseada; aviso N.° 462 nivel ROJO y aviso de quebradas N.° 312 leídos. |
+| [SENAMHI](https://idesep.senamhi.gob.pe/geoserver/wms?service=WMS&request=GetCapabilities) | IDESEP · GeoServer | integrada | Perú. Variable por capa | Variable; muchas capas no publican fecha. WMS, WFS (GeoJSON) | Sin licencia explícita en GetCapabilities; por confirmar | Oficial. 1204 capas listadas; falta metadato temporal en varias. | 2026-11-08: GetCapabilities, GetMap, GetLegendGraphic y WFS responden. Una capa tardó más de 80 s en una petición nacional. |
+| [ENFEN (IMARPE)](https://enfen.imarpe.gob.pe/) | Comunicados oficiales | integrada | Perú y Pacífico oriental. Texto; regiones | Quincenal aproximadamente. RSS, HTML, PDF | Por confirmar; se cita y enlaza la fuente | Oficial. Es la referencia nacional del estado de alerta. | 2026-11-08: RSS responde; último Comunicado N.° 19-2026 (30-oct-2026), estado Alerta de El Niño Costero. |
+| [INGEMMET](https://geocatmin.ingemmet.gob.pe/arcgis/rest/services) | GEOCATMIN · ArcGIS REST | integrada | Perú. Inventario puntual; mapas de susceptibilidad nacionales y regionales | No publicada; el inventario se actualiza por estudios. ArcGIS REST (JSON, GeoJSON), ImageServer | Sin licencia explícita en el servicio; por confirmar antes de redistribuir | Oficial. El servidor no envía el certificado intermedio TLS (hay que incluirlo en despliegue). | 2026-11-08: 37 826 eventos descargados (28 915 + 8911) y dominio de códigos decodificado. |
+| [ANA](https://geosnirh.ana.gob.pe/server/rest/services) | GeoSNIRH · ArcGIS REST | integrada | Perú. 231 unidades hidrográficas; 1224 cuerpos de agua | No publicada. ArcGIS REST (JSON, GeoJSON, PBF) | Sin licencia explícita en el servicio; por confirmar antes de redistribuir | Oficial. La carpeta «Público» exige token. Algunos servicios tardan más de 60 s. | 2026-11-08: ws_UnidadesHidro y ws_Rios_Quebradas descargados. |
+| [CENEPRED](https://sigrid.cenepred.gob.pe/sigridv3/) | SIGRID | restringida | Perú. Escenarios de riesgo, elementos expuestos | Por escenario. ArcGIS REST (10.81), visor web | robots.txt prohíbe /arcgis/ a procesos automáticos | Oficial y muy relevante para riesgo y exposición, pero con acceso condicionado. | 2026-11-08: robots.txt leído. No se integra ni se sondea; solicitar convenio a CENEPRED. El servicio Monitoreo/Caudales citado en IDEP ya no existe. |
+| [INDECI](https://www.gob.pe/indeci) | Noticias e información de emergencias | pendiente | Perú. Reportes por evento | Por evento. HTML. El RSS probado de gob.pe devolvió HTTP 400 | Por confirmar | Oficial para emergencias. Sin API verificada. | 2026-11-08: la página responde; no hay feed utilizable. ENFEN cita el «Visor 11 INDECI», aún no evaluado. |
+| [NOAA CPC](https://www.cpc.ncep.noaa.gov/data/indices/sstoi.indices) | Índices de TSM (Niño 1+2, Niño 3.4) | integrada | Pacífico tropical. Mensual, por región Niño | Mensual. Texto de columnas fijas | Datos del gobierno de EE. UU.; citar la fuente | Referencia internacional. Serie desde 1982. | 2026-11-08: serie leída hasta 2026-10; anomalía Niño 1+2 de +5.25 °C. |
+| [Open-Meteo (datos ECMWF, GloFAS/Copernicus, ERA5)](https://open-meteo.com/en/docs) | APIs de pronóstico, ensamble, crecidas y archivo | integrada | Global. IFS 0.25°, ensamble IFS 0.25°, GloFAS ~5 km, ERA5 0.25° | Varias veces al día; ERA5 con ~5 días de retraso. JSON | CC BY 4.0. Gratis solo para uso no comercial: < 10 000 llamadas/día, < 600/min | Modelo, no observación. Sirve como puente hasta ingerir ECMWF Open Data y CDS directamente. | 2026-11-08: forecast, ensemble, flood y archive responden con CORS. |
+| [NASA](https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?SERVICE=WMTS&REQUEST=GetCapabilities) | GIBS · IMERG y SMAP L4 | integrada | Global. Hasta nivel 6 (~2.4 km/px) | Diaria. WMTS con dimensión temporal | Datos NASA, acceso abierto; citar la fuente | Imagen de visualización, no el dato numérico. Para análisis usar GES DISC. | 2026-11-08: GetCapabilities y teselas responden; IMERG disponible hasta 2026-11-07. |
+| [IGN vía OCHA (HDX)](https://data.humdata.org/dataset/cod-ab-per) | Límites administrativos COD-AB | integrada | Perú: 25 departamentos, 196 provincias, distritos. Simplificada para visualización | Actualizado en HDX el 2026-08-14. GeoJSON, SHP, GDB | CC BY-IGO | Fuente IGN. La versión simplificada no sirve para mediciones legales. | 2026-11-08: descargado y procesado; incluye Callao. |
+| [Mapzen / AWS Open Data](https://registry.opendata.aws/terrain-tiles/) | Terrain Tiles (Terrarium) | integrada | Global. Varía por zona (hasta ~30 m en Perú, según fuente) | Estático. PNG Terrarium | Abierta, con atribución a sus fuentes | DEM global compuesto. Apto para visualización; no para modelación hidráulica. | 2026-11-08: teselas responden con CORS. |
+| [Esri](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9) | World Imagery | integrada | Global. Variable | Mosaico sin fecha única. Teselas | Sujeta a términos de Esri; revisar antes de uso comercial o de producción | Mosaico base. No es imagen actual: no sirve para ver una inundación de hoy. | 2026-11-08: teselas responden con CORS. |
+| [INEI](https://www.inei.gob.pe/) | Censos y población | pendiente | Perú. Distrito y centro poblado | Censal. Por verificar | Por verificar | Necesaria para el módulo de población expuesta. | 2026-11-08: no evaluada aún. |
+| [Copernicus](https://dataspace.copernicus.eu/) | Data Space (Sentinel) y CDS | pendiente | Global. Sentinel-1/2: 10 m | Revisita de días. API con registro | Abierta con registro | Necesaria para validar inundaciones con imágenes reales. | 2026-11-08: no evaluada aún; requiere credenciales. |
+
+## Candidatos descartados o sin confirmar
+
+| Candidato | Resultado de la prueba (2026-11-08) |
+|---|---|
+| `sigrid.cenepred.gob.pe/arcgis/.../Monitoreo/Caudales` (citado en IDEP) | El servicio ya no existe |
+| `sig.cenepred.gob.pe/arcgis_server` (citado en un repositorio de terceros) | Según esa fuente, 404. No se probó |
+| `gob.pe/institucion/indeci/noticias.rss` | HTTP 400 |
+| `data.chc.ucsb.edu/products/CHIRPS-2.0/` | HTTP 404 |
+| `api.gdeltproject.org` | HTTP 429 en la única prueba |
+| `geosnirh.ana.gob.pe/.../Público` | Exige token |
+| `SERV_IMG_SUSCEP_MOV_MASA` y `SERV_IMG_SUSCEP_INUN_FLUVIAL` (INGEMMET) | Responden, pero sus códigos no coinciden con los mapas publicados. No se usan |
+| SIGRID `/arcgis/` | robots.txt lo prohíbe a procesos automáticos. Antes de leerlo se hicieron dos consultas de prueba; no se repitieron |

@@ -1,0 +1,13 @@
+.tools/
+node_modules/
+.next/
+frontend/public/cesium/
+frontend/.data-cache/
+frontend/.tile-cache/
+frontend/tsconfig.tsbuildinfo
+frontend/next-env.d.ts
+__pycache__/
+.venv/
+.pytest_cache/
+.env
+*.log

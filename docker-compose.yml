@@ -1,0 +1,43 @@
+# Servicios de la Etapa 2 en adelante. La app de la Etapa 1 no los necesita para funcionar.
+# ATENCIÓN: este archivo no se ha ejecutado aún en la máquina de desarrollo (no tiene Docker).
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: hydrowatch
+      POSTGRES_USER: hydrowatch
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hydrowatch -d hydrowatch"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]
+
+  minio:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Define MINIO_ROOT_USER en .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Define MINIO_ROOT_PASSWORD en .env}
+    volumes: [objects:/data]
+    ports: ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"]
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://hydrowatch:${POSTGRES_PASSWORD}@db:5432/hydrowatch
+      CORS_ORIGINS: http://localhost:3000
+    depends_on:
+      db: { condition: service_healthy }
+    ports: ["127.0.0.1:8000:8000"]
+
+volumes:
+  dbdata:
+  objects:
